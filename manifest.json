@@ -1,0 +1,35 @@
+{
+  "manifest_version": 3,
+  "name": "YouTube Inject Anti Pause",
+  "version": "12.2.0",
+  "description": "YouTube theme inject, focus mode, wallpaper, ad cleaner, and safe anti-pause. v12.2 storage quota fix.",
+  "permissions": [
+    "unlimitedStorage",
+    "storage",
+    "scripting",
+    "tabs"
+  ],
+  "host_permissions": [
+    "https://youtube.com/*",
+    "https://www.youtube.com/*",
+    "https://music.youtube.com/*"
+  ],
+  "action": {
+    "default_title": "YouTube Inject Anti Pause",
+    "default_popup": "popup.html"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://youtube.com/*",
+        "https://www.youtube.com/*",
+        "https://music.youtube.com/*"
+      ],
+      "js": [
+        "content.js"
+      ],
+      "run_at": "document_idle",
+      "all_frames": false
+    }
+  ]
+}

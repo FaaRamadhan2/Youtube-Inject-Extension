@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>YouTube Inject Anti Pause</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <main class="app">
+    <header class="hero">
+      <div>
+        <span class="badge">v12.2 quota fix</span>
+        <h1>YouTube Inject Anti Pause</h1>
+        <p>Theme inject + safe anti-pause. Built from zero.</p>
+      </div>
+      <span id="statusDot" class="status-dot"></span>
+    </header>
+
+    <section class="panel">
+      <div class="row master">
+        <div>
+          <strong>Main Engine</strong>
+          <small>Global ON/OFF for visual injection.</small>
+        </div>
+        <label class="switch"><input id="enabled" name="enabled" type="checkbox"><span></span></label>
+      </div>
+      <div class="grid">
+        <label><input id="hideComments" name="hideComments" type="checkbox"> Hide comments</label>
+        <label><input id="hideSidebar" name="hideSidebar" type="checkbox"> Hide sidebar</label>
+        <label><input id="hideShorts" name="hideShorts" type="checkbox"> Hide Shorts</label>
+        <label><input id="cleanPlayer" name="cleanPlayer" type="checkbox"> Clean player</label>
+        <label><input id="hideHomeFeed" name="hideHomeFeed" type="checkbox"> Hide home feed</label>
+        <label><input id="hideEndScreen" name="hideEndScreen" type="checkbox"> Hide end screen</label>
+        <label><input id="cinemaWidth" name="cinemaWidth" type="checkbox"> Cinema width</label>
+        <label><input id="adCleaner" name="adCleaner" type="checkbox"> Ad cleaner</label>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="section-title">Anti Pause Safe</div>
+      <div class="row master no-bottom">
+        <div>
+          <strong>Continue Watching Clicker</strong>
+          <small>Only clicks the popup button. No play/pause override.</small>
+        </div>
+        <label class="switch"><input id="antiPause" name="antiPause" type="checkbox"><span></span></label>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="section-title">Ad Cleaner Mode</div>
+      <select id="adMode" name="adMode">
+        <option value="normal">Normal</option>
+        <option value="aggressive">Aggressive</option>
+      </select>
+    </section>
+
+    <section class="panel">
+      <div class="section-title">Theme</div>
+      <select id="theme" name="theme">
+        <option value="youtubeDefault">YouTube Default</option>
+        <option value="darkRed">Dark Red</option>
+        <option value="midnightBlue">Midnight Blue</option>
+        <option value="purpleNeon">Purple Neon</option>
+        <option value="lightBlueSea">Light Blue Sea</option>
+        <option value="limeForest">Lime Forest</option>
+        <option value="blackGlass">Black Glass</option>
+      </select>
+
+      <div class="row subrow">
+        <div>
+          <strong>Custom Colors</strong>
+          <small>Override preset color values.</small>
+        </div>
+        <label class="switch small"><input id="customColors" name="customColors" type="checkbox"><span></span></label>
+      </div>
+
+      <div class="colors">
+        <label>Accent <input id="accent" name="accent" type="color"></label>
+        <label>Background <input id="bg" name="bg" type="color"></label>
+        <label>Text <input id="text" name="text" type="color"></label>
+      </div>
+      <button id="syncColors" aria-label="Sync colors to preset" class="ghost full" type="button">Sync Colors To Preset</button>
+    </section>
+
+    <section class="panel">
+      <div class="row">
+        <div>
+          <strong>Wallpaper</strong>
+          <small>URL or local image. Sliders update live.</small>
+        </div>
+        <label class="switch small"><input id="wallpaperEnabled" name="wallpaperEnabled" type="checkbox"><span></span></label>
+      </div>
+      <input id="wallpaperUrl" name="wallpaperUrl" class="text-input" type="url" placeholder="https://example.com/image.jpg">
+      <label class="file-btn">Upload Local Wallpaper
+        <input id="wallpaperFile" name="wallpaperFile" type="file" accept="image/png,image/jpeg,image/jpg,image/webp,image/gif,image/bmp,image/svg+xml,image/avif">
+      </label>
+      <div id="wallpaperName" class="file-name">No local wallpaper.</div>
+      <label class="range-label">Opacity <input id="wallpaperOpacity" name="wallpaperOpacity" type="range" min="0" max="100"></label>
+      <label class="range-label">Blur <input id="wallpaperBlur" name="wallpaperBlur" type="range" min="0" max="24"></label>
+      <label class="range-label">Dim <input id="wallpaperDim" name="wallpaperDim" type="range" min="0" max="90"></label>
+      <button id="clearWallpaper" aria-label="Clear wallpaper" class="ghost full" type="button">Clear Wallpaper</button>
+    </section>
+
+    <section class="panel">
+      <div class="row">
+        <div>
+          <strong>Custom CSS</strong>
+          <small>Manual CSS injection.</small>
+        </div>
+        <label class="switch small"><input id="customCssEnabled" name="customCssEnabled" type="checkbox"><span></span></label>
+      </div>
+      <textarea id="customCss" name="customCss" spellcheck="false" placeholder="/* custom YouTube CSS */"></textarea>
+    </section>
+
+    <section class="actions three sticky">
+      <button id="apply" aria-label="Apply settings" type="button">Apply</button>
+      <button id="force" aria-label="Force inject" type="button">Force Inject</button>
+      <button id="reset" aria-label="Reset settings" class="ghost" type="button">Reset</button>
+    </section>
+
+    <section class="actions two">
+      <button id="reloadTabs" aria-label="Reload YouTube tabs" class="ghost" type="button">Reload YT Tabs</button>
+      <button id="scan" aria-label="Anti pause scan" class="ghost" type="button">Anti Pause Scan</button>
+    </section>
+
+    <p id="msg">Ready.</p>
+  </main>
+  <script src="popup.js"></script>
+</body>
+</html>
