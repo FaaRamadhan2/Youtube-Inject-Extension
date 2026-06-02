@@ -1,0 +1,1 @@
+# YT-Auto-Inject-Anti-Pause
