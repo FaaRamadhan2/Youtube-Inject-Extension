@@ -1,3 +1,20 @@
+<!--
+  YT Auto Inject Anti Pause
+  Copyright (C) 2026 Faa Ramadhan
+
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program. If not, see <https://www.gnu.org/licenses/>.
+-->
 <!doctype html>
 <html lang="en">
 <head>
@@ -67,7 +84,6 @@
         <option value="limeForest">Lime Forest</option>
         <option value="blackGlass">Black Glass</option>
       </select>
-
       <div class="row subrow">
         <div>
           <strong>Custom Colors</strong>
@@ -75,7 +91,6 @@
         </div>
         <label class="switch small"><input id="customColors" name="customColors" type="checkbox"><span></span></label>
       </div>
-
       <div class="colors">
         <label>Accent <input id="accent" name="accent" type="color"></label>
         <label>Background <input id="bg" name="bg" type="color"></label>
@@ -116,15 +131,13 @@
 
     <section class="actions three sticky">
       <button id="apply" aria-label="Apply settings" type="button">Apply</button>
-      <button id="force" aria-label="Force inject" type="button">Force Inject</button>
+      <button id="force" aria-label="Force inject all YouTube tabs" type="button">Force Inject</button>
       <button id="reset" aria-label="Reset settings" class="ghost" type="button">Reset</button>
     </section>
-
     <section class="actions two">
       <button id="reloadTabs" aria-label="Reload YouTube tabs" class="ghost" type="button">Reload YT Tabs</button>
-      <button id="scan" aria-label="Anti pause scan" class="ghost" type="button">Anti Pause Scan</button>
+      <button id="scan" aria-label="Run anti pause scan" class="ghost" type="button">Anti Pause Scan</button>
     </section>
-
     <p id="msg">Ready.</p>
   </main>
   <script src="popup.js"></script>
