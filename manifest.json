@@ -31,7 +31,5 @@
       "run_at": "document_idle",
       "all_frames": false
     }
-  ],
-  "author": "Faa Ramadhan",
-  "license": "GPL-3.0-or-later"
+  ]
 }

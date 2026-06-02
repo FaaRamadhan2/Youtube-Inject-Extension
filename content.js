@@ -1,25 +1,7 @@
-/*
- * YT Auto Inject Anti Pause
- * Copyright (C) 2026 Faa Ramadhan
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- */
-
 "use strict";
 
 (() => {
-  const VERSION = "12.2.0";
+  const VERSION = "12.3.0";
   const STORAGE_KEY = "ytInjectAntiPauseV12";
   const CONTROLLER = "__YT_IAP_V12_CONTROLLER__";
   const STYLE_ID = "yt-iap-v12-style";
@@ -137,7 +119,158 @@
       a,#text.ytd-channel-name,#owner-name a,yt-icon,ytd-button-renderer,yt-button-shape,paper-button{color:${t.accent}!important}
       #progress,.ytp-play-progress,.ytp-swatch-background-color,.ytp-swatch-color{background:linear-gradient(90deg,${t.accent},${t.accent2})!important;color:${t.accent}!important}
       ytd-text-inline-expander,#description,#description-inline-expander,#description-inner,#snippet,#expandable-metadata,ytd-watch-info-text,ytd-video-secondary-info-renderer,ytd-structured-description-content-renderer{background:${t.desc}!important;color:${t.text}!important;border-color:${t.border}!important;border-radius:14px!important}
-      ytd-popup-container *,tp-yt-paper-dialog *,ytd-multi-page-menu-renderer *,ytd-menu-popup-renderer *,ytd-notification-renderer *,ytd-compact-link-renderer *,ytd-menu-service-item-renderer *{color:${t.text}!important}
+
+      ytd-popup-container,
+      ytd-popup-container tp-yt-paper-dialog,
+      ytd-popup-container ytd-multi-page-menu-renderer,
+      ytd-popup-container ytd-menu-popup-renderer,
+      ytd-popup-container ytd-simple-menu-header-renderer,
+      ytd-popup-container ytd-active-account-header-renderer,
+      ytd-popup-container ytd-notification-renderer,
+      ytd-popup-container ytd-notification-multi-action-renderer,
+      ytd-popup-container ytd-notification-topbar-button-renderer,
+      ytd-popup-container ytd-compact-link-renderer,
+      ytd-popup-container ytd-menu-service-item-renderer,
+      ytd-popup-container #container,
+      ytd-popup-container #contentWrapper,
+      ytd-popup-container #items,
+      ytd-popup-container #sections,
+      ytd-popup-container #header,
+      ytd-popup-container #scroll-container,
+      ytd-popup-container tp-yt-paper-listbox,
+      tp-yt-paper-dialog,
+      ytd-multi-page-menu-renderer,
+      ytd-menu-popup-renderer {
+        background:${t.surface}!important;
+        color:${t.text}!important;
+        border-color:${t.border}!important;
+      }
+
+      ytd-popup-container #contentWrapper,
+      ytd-popup-container ytd-multi-page-menu-renderer,
+      ytd-popup-container ytd-menu-popup-renderer,
+      ytd-popup-container tp-yt-paper-dialog {
+        border:1px solid ${t.border}!important;
+        border-radius:16px!important;
+        overflow:hidden!important;
+        box-shadow:0 20px 60px rgba(0,0,0,.42)!important;
+        backdrop-filter:blur(18px)!important;
+      }
+
+      ytd-popup-container #empty-notification,
+      ytd-popup-container #empty-state,
+      ytd-popup-container .empty-state,
+      ytd-popup-container #body,
+      ytd-popup-container #message,
+      ytd-popup-container #label,
+      ytd-popup-container #subtext,
+      ytd-popup-container #notification-count,
+      ytd-popup-container yt-formatted-string,
+      ytd-popup-container span,
+      ytd-popup-container div,
+      ytd-popup-container a {
+        color:${t.text}!important;
+      }
+
+      ytd-popup-container #secondary-text,
+      ytd-popup-container #metadata,
+      ytd-popup-container #time,
+      ytd-popup-container #subtitle,
+      ytd-popup-container #byline,
+      ytd-popup-container #description,
+      ytd-popup-container .metadata,
+      ytd-notification-renderer #metadata,
+      ytd-notification-renderer #sub-text {
+        color:${t.muted}!important;
+      }
+
+      ytd-popup-container yt-icon,
+      ytd-popup-container tp-yt-iron-icon,
+      ytd-popup-container svg,
+      ytd-popup-container path {
+        color:${t.accent}!important;
+        fill:${t.accent}!important;
+        stroke:${t.accent}!important;
+      }
+
+      ytd-popup-container ytd-notification-renderer:hover,
+      ytd-popup-container ytd-compact-link-renderer:hover,
+      ytd-popup-container ytd-menu-service-item-renderer:hover {
+        background:${t.surface2}!important;
+      }
+
+      ytd-playlist-panel-renderer,
+      ytd-playlist-panel-renderer #container,
+      ytd-playlist-panel-renderer #header,
+      ytd-playlist-panel-renderer #items,
+      ytd-playlist-panel-renderer #playlist,
+      ytd-playlist-panel-header-renderer,
+      ytd-playlist-panel-video-renderer,
+      ytd-playlist-panel-video-renderer #container,
+      ytd-playlist-panel-video-renderer #index-container,
+      ytd-playlist-panel-video-renderer #meta,
+      ytd-playlist-panel-video-renderer #menu,
+      ytd-watch-flexy ytd-playlist-panel-renderer {
+        background:${t.surface}!important;
+        color:${t.text}!important;
+        border-color:${t.border}!important;
+      }
+
+      ytd-playlist-panel-renderer {
+        border:1px solid ${t.border}!important;
+        border-radius:18px!important;
+        overflow:hidden!important;
+        box-shadow:0 20px 60px rgba(0,0,0,.36)!important;
+      }
+
+      ytd-playlist-panel-video-renderer {
+        margin:4px 8px!important;
+        border-radius:12px!important;
+        background:${t.card}!important;
+      }
+
+      ytd-playlist-panel-video-renderer:hover,
+      ytd-playlist-panel-video-renderer[selected],
+      ytd-playlist-panel-video-renderer[watch-color-update] {
+        background:${t.surface2}!important;
+      }
+
+      ytd-playlist-panel-renderer #title,
+      ytd-playlist-panel-renderer #video-title,
+      ytd-playlist-panel-renderer #playlist-title,
+      ytd-playlist-panel-renderer #publisher-container,
+      ytd-playlist-panel-renderer yt-formatted-string,
+      ytd-playlist-panel-renderer span,
+      ytd-playlist-panel-renderer a {
+        color:${t.text}!important;
+      }
+
+      ytd-playlist-panel-renderer #byline,
+      ytd-playlist-panel-renderer #metadata,
+      ytd-playlist-panel-renderer #video-info,
+      ytd-playlist-panel-renderer #subtitle,
+      ytd-playlist-panel-renderer #index {
+        color:${t.muted}!important;
+      }
+
+      ytd-playlist-panel-renderer yt-icon,
+      ytd-playlist-panel-renderer tp-yt-iron-icon,
+      ytd-playlist-panel-renderer svg,
+      ytd-playlist-panel-renderer path {
+        color:${t.accent}!important;
+        fill:${t.accent}!important;
+        stroke:${t.accent}!important;
+      }
+
+      ytd-playlist-panel-renderer ytd-thumbnail,
+      ytd-playlist-panel-renderer ytd-thumbnail img,
+      ytd-playlist-panel-renderer #thumbnail,
+      ytd-playlist-panel-renderer #thumbnail img {
+        border-radius:10px!important;
+        overflow:hidden!important;
+      }
+
+            ytd-popup-container *,tp-yt-paper-dialog *,ytd-multi-page-menu-renderer *,ytd-menu-popup-renderer *,ytd-notification-renderer *,ytd-compact-link-renderer *,ytd-menu-service-item-renderer *{color:${t.text}!important}
       ytd-popup-container yt-icon,ytd-popup-container tp-yt-iron-icon,ytd-masthead #buttons yt-icon,ytd-masthead #buttons tp-yt-iron-icon{color:${t.text}!important;fill:${t.text}!important}
       ytd-popup-container #secondary-text,ytd-popup-container #metadata,ytd-popup-container #time,ytd-notification-renderer #metadata{color:${t.muted}!important}
       ytd-popup-container img,ytd-notification-renderer img,ytd-popup-container yt-img-shadow{opacity:1!important;filter:none!important}
