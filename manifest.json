@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "YouTube Focus Anti Pause Combo",
-  "version": "13.0.2",
-  "description": "Focus mode, YouTube theme injection, visible wallpaper layers, ad cleanup, and safe continue-watching clicker.",
+  "version": "13.0.0",
+  "description": "Focus mode, YouTube theme injection, wallpaper, ad cleanup, and safe continue-watching clicker.",
   "permissions": [
     "storage",
     "scripting",

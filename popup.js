@@ -16,9 +16,8 @@
  */
 "use strict";
 
-const STORAGE_KEY = "ytFocusAntiPauseComboV13_1";
-const OLD_STORAGE_KEY = "ytFocusAntiPauseComboV13";
-const V12_STORAGE_KEY = "ytInjectAntiPauseV12";
+const STORAGE_KEY = "ytFocusAntiPauseComboV13";
+const OLD_STORAGE_KEY = "ytInjectAntiPauseV12";
 const TARGET_URLS = ["https://youtube.com/*", "https://www.youtube.com/*", "https://music.youtube.com/*"];
 
 const DEFAULTS = {
@@ -33,7 +32,7 @@ const DEFAULTS = {
   cinemaWidth: false,
   adCleaner: true,
   adMode: "normal",
-  theme: "lightBlueSea",
+  theme: "youtubeDefault",
   customColors: false,
   accent: "#38bdf8",
   bg: "#06202b",
@@ -80,10 +79,8 @@ function setMsg(text, bad = false) {
   el.msg.style.color = bad ? "#fecdd3" : "#bae6fd";
 }
 
-function normalize(value, migrated = false) {
-  const next = { ...DEFAULTS, ...(value || {}) };
-  if (migrated && next.theme === "youtubeDefault" && !next.customColors) next.theme = "lightBlueSea";
-  return next;
+function normalize(value) {
+  return { ...DEFAULTS, ...(value || {}) };
 }
 
 function isYouTubeUrl(url) {
@@ -319,9 +316,8 @@ function bindEvents() {
 }
 
 async function loadSettings() {
-  const data = await chrome.storage.local.get({ [STORAGE_KEY]: null, [OLD_STORAGE_KEY]: null, [V12_STORAGE_KEY]: null });
-  const isMigrated = !data[STORAGE_KEY] && Boolean(data[OLD_STORAGE_KEY] || data[V12_STORAGE_KEY]);
-  const settings = normalize(data[STORAGE_KEY] || data[OLD_STORAGE_KEY] || data[V12_STORAGE_KEY] || DEFAULTS, isMigrated);
+  const data = await chrome.storage.local.get({ [STORAGE_KEY]: null, [OLD_STORAGE_KEY]: null });
+  const settings = normalize(data[STORAGE_KEY] || data[OLD_STORAGE_KEY] || DEFAULTS);
   await chrome.storage.local.set({ [STORAGE_KEY]: settings }).catch(() => null);
   return settings;
 }
