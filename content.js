@@ -17,9 +17,10 @@
 "use strict";
 
 (() => {
-  const VERSION = "13.0.0";
-  const STORAGE_KEY = "ytFocusAntiPauseComboV13";
-  const OLD_STORAGE_KEY = "ytInjectAntiPauseV12";
+  const VERSION = "13.0.1";
+  const STORAGE_KEY = "ytFocusAntiPauseComboV13_1";
+  const OLD_STORAGE_KEY = "ytFocusAntiPauseComboV13";
+  const V12_STORAGE_KEY = "ytInjectAntiPauseV12";
   const CONTROLLER = "__YT_FOCUS_COMBO_V13__";
   const STYLE_ID = "yt-focus-combo-style";
   const CUSTOM_STYLE_ID = "yt-focus-combo-custom-style";
@@ -36,7 +37,7 @@
     cinemaWidth: false,
     adCleaner: true,
     adMode: "normal",
-    theme: "youtubeDefault",
+    theme: "lightBlueSea",
     customColors: false,
     accent: "#38bdf8",
     bg: "#06202b",
@@ -84,8 +85,10 @@
   let lastAntiPauseScan = 0;
   let lastAntiPauseClick = 0;
 
-  function normalize(value) {
-    return { ...DEFAULTS, ...(value || {}) };
+  function normalize(value, migrated = false) {
+    const next = { ...DEFAULTS, ...(value || {}) };
+    if (migrated && next.theme === "youtubeDefault" && !next.customColors) next.theme = "lightBlueSea";
+    return next;
   }
 
   function clamp(value, min, max) {
@@ -168,9 +171,9 @@
     const wallpaper = wallpaperCss();
     if (t.isDefault) return wallpaper;
     return `${wallpaper}
-      html,html[dark],body,ytd-app,ytd-watch-flexy,ytd-browse,ytd-search,ytd-page-manager{--yt-spec-base-background:${t.bg}!important;--yt-spec-raised-background:${t.surface}!important;--yt-spec-menu-background:${t.surface}!important;--yt-spec-text-primary:${t.text}!important;--yt-spec-text-secondary:${t.muted}!important;--yt-spec-call-to-action:${t.accent}!important;--yt-spec-themed-blue:${t.accent}!important;color:${t.text}!important}
+      html,html[dark],body,ytd-app,ytd-watch-flexy,ytd-browse,ytd-search,ytd-page-manager{--yt-spec-base-background:${t.bg}!important;--yt-spec-general-background-a:${t.bg}!important;--yt-spec-general-background-b:${t.bg2}!important;--yt-spec-raised-background:${t.surface}!important;--yt-spec-menu-background:${t.surface}!important;--yt-spec-text-primary:${t.text}!important;--yt-spec-text-secondary:${t.muted}!important;--yt-spec-call-to-action:${t.accent}!important;--yt-spec-themed-blue:${t.accent}!important;color:${t.text}!important}
       html,body{background:linear-gradient(180deg,${t.bg2},${t.bg})!important;color:${t.text}!important}
-      ytd-app,#content,#page-manager,ytd-page-manager,ytd-watch-flexy,ytd-browse,ytd-search,ytd-rich-grid-renderer,ytd-section-list-renderer,ytd-item-section-renderer{background:${settings.wallpaperEnabled ? "transparent" : `linear-gradient(180deg,${t.bg2},${t.bg})`}!important;color:${t.text}!important}
+      ytd-app,#content,#page-manager,ytd-page-manager,ytd-watch-flexy,ytd-browse,ytd-search,ytd-two-column-browse-results-renderer,ytd-rich-grid-renderer,ytd-section-list-renderer,ytd-item-section-renderer,ytd-browse[page-subtype="channels"] #contents,ytd-browse[page-subtype="channels"] #content,ytd-browse[page-subtype="channels"] #primary{background:${settings.wallpaperEnabled ? "transparent" : `linear-gradient(180deg,${t.bg2},${t.bg})`}!important;color:${t.text}!important}
       ytd-masthead,#masthead,#background.ytd-masthead{background:linear-gradient(90deg,${t.surface},${hexToRgba(t.accent,0.08)})!important;color:${t.text}!important;border-bottom:1px solid ${t.border}!important;backdrop-filter:blur(18px)!important}
       #container.ytd-searchbox,#search-input,#search-input input,ytd-searchbox input{background:${t.inputBg}!important;color:${t.inputText}!important;border-color:${t.border}!important;caret-color:${t.accent}!important}
       #search-icon-legacy,button#search-icon-legacy{background:${t.inputBg}!important;color:${t.inputText}!important;border-color:${t.border}!important}
@@ -187,6 +190,13 @@
       ytd-popup-container *,tp-yt-paper-dialog *,ytd-multi-page-menu-renderer *,ytd-menu-popup-renderer *,ytd-playlist-panel-renderer *{color:${t.text}!important}
       ytd-popup-container yt-icon,ytd-popup-container tp-yt-iron-icon,ytd-playlist-panel-renderer yt-icon,ytd-playlist-panel-renderer tp-yt-iron-icon{color:${t.accent}!important;fill:${t.accent}!important}
       ytd-popup-container #secondary-text,ytd-popup-container #metadata,ytd-popup-container #time,ytd-playlist-panel-renderer #byline,ytd-playlist-panel-renderer #metadata,ytd-playlist-panel-renderer #video-info,ytd-playlist-panel-renderer #subtitle,ytd-playlist-panel-renderer #index{color:${t.muted}!important}
+      ytd-browse[page-subtype="channels"],ytd-channel-sub-menu-renderer,ytd-c4-tabbed-header-renderer,ytd-tabbed-page-header-renderer,yt-page-header-renderer,ytd-page-header-renderer,#page-header,#channel-header,#channel-container,#inner-header-container,#tabs-container,#tabsContent,#tabsContainer,#header.ytd-c4-tabbed-header-renderer,#channel-tagline,#channel-handle,#channel-name,#meta,#metadata-container,ytd-channel-about-metadata-renderer,ytd-channel-featured-content-renderer{background:${t.surface}!important;color:${t.text}!important;border-color:${t.border}!important}
+      ytd-browse[page-subtype="channels"] #tabsContainer,ytd-browse[page-subtype="channels"] #tabsContent,ytd-browse[page-subtype="channels"] ytd-c4-tabbed-header-renderer{border-bottom:1px solid ${t.border}!important;backdrop-filter:blur(14px)!important}
+      ytd-browse[page-subtype="channels"] yt-tab-shape,ytd-browse[page-subtype="channels"] tp-yt-paper-tab,ytd-browse[page-subtype="channels"] ytd-expandable-tab-renderer,ytd-browse[page-subtype="channels"] yt-chip-cloud-chip-renderer{background:${t.card}!important;color:${t.text}!important;border-color:${t.border}!important;border-radius:10px!important}
+      ytd-browse[page-subtype="channels"] yt-tab-shape[tab-selected],ytd-browse[page-subtype="channels"] tp-yt-paper-tab.iron-selected,ytd-browse[page-subtype="channels"] yt-chip-cloud-chip-renderer[chip-style="STYLE_DEFAULT"]{background:${t.surface2}!important;color:${t.accent}!important}
+      ytd-browse[page-subtype="channels"] ytd-video-renderer,ytd-browse[page-subtype="channels"] ytd-grid-video-renderer,ytd-browse[page-subtype="channels"] ytd-rich-item-renderer,ytd-browse[page-subtype="channels"] ytd-shelf-renderer,ytd-browse[page-subtype="channels"] ytd-reel-shelf-renderer{background:${t.card}!important;color:${t.text}!important;border:1px solid ${t.border}!important;border-radius:14px!important;overflow:hidden!important}
+      ytd-browse[page-subtype="channels"] yt-formatted-string,ytd-browse[page-subtype="channels"] #text,ytd-browse[page-subtype="channels"] #title,ytd-browse[page-subtype="channels"] #video-title,ytd-browse[page-subtype="channels"] .yt-core-attributed-string{color:${t.text}!important}
+      ytd-browse[page-subtype="channels"] #metadata-line,ytd-browse[page-subtype="channels"] #metadata-line span,ytd-browse[page-subtype="channels"] #subscriber-count,ytd-browse[page-subtype="channels"] #channel-handle,ytd-browse[page-subtype="channels"] #description{color:${t.muted}!important}
       ytd-playlist-panel-renderer{border:1px solid ${t.border}!important;border-radius:16px!important;overflow:hidden!important;box-shadow:0 20px 60px rgba(0,0,0,.36)!important}
       ytd-playlist-panel-video-renderer{margin:4px 8px!important;border-radius:12px!important;background:${t.card}!important}
       ytd-playlist-panel-video-renderer:hover,ytd-playlist-panel-video-renderer[selected],ytd-playlist-panel-video-renderer[watch-color-update]{background:${t.surface2}!important}
@@ -312,8 +322,9 @@
   }
 
   function loadAndApply() {
-    chrome.storage.local.get({ [STORAGE_KEY]: null, [OLD_STORAGE_KEY]: null }, data => {
-      const saved = normalize(data[STORAGE_KEY] || data[OLD_STORAGE_KEY] || DEFAULTS);
+    chrome.storage.local.get({ [STORAGE_KEY]: null, [OLD_STORAGE_KEY]: null, [V12_STORAGE_KEY]: null }, data => {
+      const isMigrated = !data[STORAGE_KEY] && Boolean(data[OLD_STORAGE_KEY] || data[V12_STORAGE_KEY]);
+      const saved = normalize(data[STORAGE_KEY] || data[OLD_STORAGE_KEY] || data[V12_STORAGE_KEY] || DEFAULTS, isMigrated);
       chrome.storage.local.set({ [STORAGE_KEY]: saved }, () => apply(saved));
     });
   }
@@ -333,7 +344,7 @@
 
   function onStorage(changes, areaName) {
     if (areaName !== "local") return;
-    const change = changes[STORAGE_KEY] || changes[OLD_STORAGE_KEY];
+    const change = changes[STORAGE_KEY] || changes[OLD_STORAGE_KEY] || changes[V12_STORAGE_KEY];
     if (change) apply(change.newValue);
   }
 
