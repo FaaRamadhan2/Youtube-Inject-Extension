@@ -23,6 +23,7 @@
   const CONTROLLER = "__YT_FOCUS_COMBO_V13__";
   const STYLE_ID = "yt-focus-combo-style";
   const CUSTOM_STYLE_ID = "yt-focus-combo-custom-style";
+  const CUSTOM_CSS_FOLDER_ID = "yt-focus-combo-custom-folder-style";
 
   const DEFAULTS = {
     enabled: true,
@@ -49,7 +50,8 @@
     wallpaperBlur: 4,
     wallpaperDim: 55,
     customCssEnabled: false,
-    customCss: ""
+    customCss: "",
+    folderCssFile: ""
   };
 
   const THEMES = {
@@ -180,8 +182,8 @@
       ytd-multi-page-menu-renderer ytd-notification-renderer,ytd-multi-page-menu-renderer ytd-notification-renderer #content,ytd-multi-page-menu-renderer ytd-notification-renderer #metadata,ytd-multi-page-menu-renderer ytd-notification-renderer #details{background:${t.card}!important;color:${t.text}!important}
       ytd-multi-page-menu-renderer ytd-notification-renderer:hover{background:${t.surface2}!important}
       ytd-watch-metadata,#below{border-radius:16px!important;padding:12px!important}
-      ytd-rich-item-renderer,ytd-compact-video-renderer,ytd-playlist-panel-video-renderer,ytd-grid-video-renderer,ytd-rich-grid-media{background:${t.card}!important;color:${t.text}!important;border:1px solid ${t.border}!important;border-radius:14px!important;overflow:hidden!important}
-      ytd-rich-item-renderer:hover,ytd-compact-video-renderer:hover,ytd-playlist-panel-video-renderer:hover{background:${t.surface2}!important}
+      ytd-rich-item-renderer,ytd-compact-video-renderer,ytd-playlist-panel-video-renderer,ytd-grid-video-renderer,ytd-rich-grid-media,ytd-compact-radio-renderer,ytd-compact-playlist-renderer,ytd-radio-renderer{background:${t.card}!important;color:${t.text}!important;border:1px solid ${t.border}!important;border-radius:14px!important;overflow:hidden!important}
+      ytd-rich-item-renderer:hover,ytd-compact-video-renderer:hover,ytd-playlist-panel-video-renderer:hover,ytd-compact-radio-renderer:hover,ytd-compact-playlist-renderer:hover,ytd-radio-renderer:hover{background:${t.surface2}!important}
       ytd-thumbnail,ytd-thumbnail img,#thumbnail,#thumbnail img{border-radius:12px!important;overflow:hidden!important}
       yt-formatted-string,#video-title,#title,#content-text,#metadata-line,#description,#owner,#channel-name,#text,.yt-core-attributed-string,.yt-spec-button-shape-next__button-text-content{color:${t.text}!important}
       #metadata-line span,#secondary-text,#byline,#owner-sub-count,#subtitle,.ytd-video-meta-block,.metadata-snippet-text,#description-text,#channel-info{color:${t.muted}!important}
@@ -190,10 +192,16 @@
       ytd-text-inline-expander,#description,#description-inline-expander,#description-inner,#snippet,#expandable-metadata,ytd-watch-info-text,ytd-video-secondary-info-renderer,ytd-structured-description-content-renderer{background:${t.desc}!important;color:${t.text}!important;border-color:${t.border}!important;border-radius:14px!important}
       ytd-popup-container *,tp-yt-paper-dialog *,ytd-multi-page-menu-renderer *,ytd-menu-popup-renderer *,ytd-playlist-panel-renderer *{color:${t.text}!important}
       ytd-popup-container yt-icon,ytd-popup-container tp-yt-iron-icon,ytd-playlist-panel-renderer yt-icon,ytd-playlist-panel-renderer tp-yt-iron-icon{color:${t.accent}!important;fill:${t.accent}!important}
-      ytd-popup-container #secondary-text,ytd-popup-container #metadata,ytd-popup-container #time,ytd-playlist-panel-renderer #byline,ytd-playlist-panel-renderer #metadata,ytd-playlist-panel-renderer #video-info,ytd-playlist-panel-renderer #subtitle,ytd-playlist-panel-renderer #index{color:${t.muted}!important}
+      ytd-popup-container #secondary-text,ytd-popup-container #metadata,ytd-popup-container #time,ytd-playlist-panel-renderer #byline,ytd-playlist-panel-renderer #metadata,ytd-playlist-panel-renderer #video-info,ytd-playlist-panel-renderer #subtitle,ytd-playlist-panel-renderer #index,ytd-playlist-panel-renderer .publisher{color:${t.muted}!important}
       ytd-playlist-panel-renderer{border:1px solid ${t.border}!important;border-radius:16px!important;overflow:hidden!important;box-shadow:0 20px 60px rgba(0,0,0,.36)!important}
+      ytd-playlist-panel-renderer .playlist-items,ytd-playlist-panel-renderer #items{background:${t.surface}!important;color:${t.text}!important}
       ytd-playlist-panel-video-renderer{margin:4px 8px!important;border-radius:12px!important;background:${t.card}!important}
       ytd-playlist-panel-video-renderer:hover,ytd-playlist-panel-video-renderer[selected],ytd-playlist-panel-video-renderer[watch-color-update]{background:${t.surface2}!important}
+      ytd-playlist-panel-renderer .header{background:${t.desc}!important;border-bottom:1px solid ${t.border}!important;padding:12px 16px!important}
+      ytd-playlist-panel-renderer .title{color:${t.text}!important;font-weight:500!important}
+      ytd-playlist-panel-renderer .publisher{color:${t.muted}!important}
+      ytd-item-section-renderer #header{background:transparent!important;padding:12px 16px!important;border-bottom:1px solid ${t.border}!important}
+      ytd-item-section-renderer #header #title,ytd-watch-next-secondary-results-renderer #header yt-formatted-string{color:${t.text}!important}
       ytd-search ytd-video-renderer,ytd-search ytd-radio-renderer,ytd-search ytd-playlist-renderer,ytd-search ytd-shelf-renderer{background:transparent!important;border:0!important;border-radius:0!important;overflow:visible!important;box-shadow:none!important;transform:none!important}
     `;
   }
@@ -213,9 +221,41 @@
     `;
   }
 
+  async function loadCustomCssFolder() {
+    const el = ensureStyle(CUSTOM_CSS_FOLDER_ID);
+    const file = settings.folderCssFile;
+    if (!settings.enabled || !file) { el.textContent = ""; return; }
+    try {
+      const resp = await fetch(chrome.runtime.getURL("custom-css/" + file));
+      el.textContent = resp.ok ? await resp.text() : "";
+    } catch { el.textContent = ""; }
+  }
+
   function applyCss() {
     ensureStyle(STYLE_ID).textContent = [themeCss(), featureCss()].join("\n");
     ensureStyle(CUSTOM_STYLE_ID).textContent = settings.enabled && settings.customCssEnabled ? String(settings.customCss || "") : "";
+    loadCustomCssFolder();
+  }
+
+  function forceTheme() {
+    if (!settings.enabled) return;
+    const t = getTheme();
+    if (t.isDefault) return;
+    const el = (sel, props) => document.querySelectorAll(sel).forEach(n => { for (const [k, v] of Object.entries(props)) { if (v != null) n.style.setProperty(k, v, 'important'); } });
+    el('ytd-playlist-panel-renderer', { background: t.surface, color: t.text, borderColor: t.border });
+    el('ytd-playlist-panel-renderer .playlist-items,ytd-playlist-panel-renderer #items', { background: t.surface, color: t.text });
+    el('ytd-playlist-panel-renderer .header', { background: t.desc });
+    el('ytd-playlist-panel-renderer #header-description', { background: t.desc });
+    el('ytd-playlist-panel-renderer .title', { color: t.text });
+    el('ytd-playlist-panel-renderer .publisher,ytd-playlist-panel-renderer #publisher-container', { color: t.muted });
+    el('ytd-playlist-panel-video-renderer', { background: t.card, color: t.text, borderColor: t.border });
+    el('ytd-compact-radio-renderer', { background: t.card, color: t.text, borderColor: t.border });
+    el('ytd-compact-playlist-renderer', { background: t.card, color: t.text, borderColor: t.border });
+    el('ytd-radio-renderer', { background: t.card, color: t.text, borderColor: t.border });
+    el('ytd-compact-video-renderer', { background: t.card, color: t.text, borderColor: t.border });
+    el('ytd-item-section-renderer #header', { borderBottomColor: t.border });
+    el('ytd-item-section-renderer #header #title', { color: t.text });
+    el('ytd-watch-next-secondary-results-renderer #header yt-formatted-string', { color: t.text });
   }
 
   function runAdCleaner() {
@@ -310,6 +350,7 @@
     removeOwnedNodes();
     if (!settings.enabled) return true;
     applyCss();
+    forceTheme();
     runAdCleaner();
     antiPauseScan();
     return true;
@@ -359,9 +400,11 @@
 
   chrome.runtime.onMessage.addListener(onMessage);
   chrome.storage.onChanged.addListener(onStorage);
+  let themeTimer = 0;
   observer = new MutationObserver(() => {
     runAdCleaner();
     antiPauseScan();
+    if (!themeTimer) { themeTimer = setTimeout(() => { themeTimer = 0; forceTheme(); }, 300); }
   });
   observer.observe(document.documentElement, { childList: true, subtree: true });
   interval = setInterval(() => {

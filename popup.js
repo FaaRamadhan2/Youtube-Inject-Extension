@@ -45,7 +45,8 @@ const DEFAULTS = {
   wallpaperBlur: 4,
   wallpaperDim: 55,
   customCssEnabled: false,
-  customCss: ""
+  customCss: "",
+  folderCssFile: ""
 };
 
 const PRESETS = {
@@ -62,7 +63,7 @@ const FIELD_IDS = [
   "enabled", "antiPause", "hideComments", "hideSidebar", "hideShorts", "cleanPlayer",
   "hideHomeFeed", "hideEndScreen", "cinemaWidth", "adCleaner", "adMode", "theme",
   "customColors", "accent", "bg", "text", "wallpaperEnabled", "wallpaperUrl",
-  "wallpaperOpacity", "wallpaperBlur", "wallpaperDim", "customCssEnabled", "customCss"
+  "wallpaperOpacity", "wallpaperBlur", "wallpaperDim", "customCssEnabled", "customCss", "folderCssFile"
 ];
 
 const el = {};
@@ -253,6 +254,25 @@ async function compressImage(file) {
   throw new Error("Compressed image still too large.");
 }
 
+async function populateFolderCssDropdown() {
+  const sel = byId("folderCssFile");
+  if (!sel) return;
+  const prev = sel.value;
+  sel.innerHTML = '<option value="">None</option>';
+  try {
+    const resp = await fetch(chrome.runtime.getURL("custom-css/index.json"));
+    if (!resp.ok) return;
+    const files = await resp.json();
+    for (const f of files) {
+      const opt = document.createElement("option");
+      opt.value = f;
+      opt.textContent = f.replace(/\.css$/i, "");
+      sel.appendChild(opt);
+    }
+    if (prev) sel.value = prev;
+  } catch {}
+}
+
 function bindEvents() {
   byId("apply").addEventListener("click", () => applyActive(false));
   byId("force").addEventListener("click", () => forceAll());
@@ -301,6 +321,7 @@ function bindEvents() {
       setMsg(error?.message || "Wallpaper failed.", true);
     }
   });
+  el.folderCssFile.addEventListener("change", queueLive);
   el.theme.addEventListener("change", () => {
     syncColors();
     el.customColors.checked = false;
@@ -332,6 +353,7 @@ async function init() {
   el.wallpaperName = byId("wallpaperName");
   bindEvents();
   writeForm(await loadSettings());
+  await populateFolderCssDropdown();
   setMsg("Ready.");
 }
 

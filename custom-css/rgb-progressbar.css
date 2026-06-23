@@ -1,0 +1,85 @@
+/* RGB animated progress bar */
+.ytp-play-progress,
+.ytp-swatch-background-color,
+.ytp-swatch-color,
+#progress {
+  background: linear-gradient(
+    90deg,
+    #ff0000,
+    #ff7a00,
+    #ffff00,
+    #00ff00,
+    #00ffff,
+    #0000ff,
+    #8b00ff,
+    #ff00ff,
+    #ff0000
+  ) !important;
+  background-size: 400% 100% !important;
+  animation: ytFullRgbMove 2.5s linear infinite !important;
+  box-shadow:
+    0 0 8px #ff004c,
+    0 0 14px #00c8ff,
+    0 0 22px #00ff85 !important;
+}
+
+/* RGB player control icons */
+.ytp-chrome-controls .ytp-button,
+.ytp-chrome-controls .ytp-button svg,
+.ytp-chrome-controls .ytp-button path,
+.ytp-time-display,
+.ytp-time-current,
+.ytp-time-duration,
+.ytp-time-separator {
+  color: #00ffff !important;
+  fill: #00ffff !important;
+  text-shadow:
+    0 0 8px #00ffff,
+    0 0 14px #ff00ff !important;
+}
+
+/* RGB volume slider */
+.ytp-volume-slider-handle,
+.ytp-volume-slider-handle::before,
+.ytp-volume-slider-handle::after,
+.ytp-volume-panel,
+.ytp-volume-slider {
+  color: #ff00ff !important;
+  fill: #ff00ff !important;
+}
+
+/* RGB player bottom bar glow */
+.ytp-chrome-bottom {
+  background: linear-gradient(
+    180deg,
+    transparent,
+    rgba(255, 0, 255, 0.14),
+    rgba(0, 255, 255, 0.18)
+  ) !important;
+  border-radius: 18px !important;
+}
+
+/* RGB tooltip */
+.ytp-tooltip,
+.ytp-tooltip-text,
+.ytp-tooltip-bg {
+  background: rgba(10, 10, 20, 0.92) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(0, 255, 255, 0.45) !important;
+  box-shadow:
+    0 0 12px rgba(0, 255, 255, 0.7),
+    0 0 18px rgba(255, 0, 255, 0.45) !important;
+}
+
+/* RGB animation */
+@keyframes ytFullRgbMove {
+  0% {
+    background-position: 0% 50%;
+    filter: hue-rotate(0deg);
+  }
+
+  100% {
+    background-position: 400% 50%;
+    filter: hue-rotate(360deg);
+  }
+}

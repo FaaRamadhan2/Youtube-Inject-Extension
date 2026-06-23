@@ -1,176 +1,89 @@
-# YT Auto Inject Anti Pause
+# YouTube Focus Combo
 
-**YT Auto Inject Anti Pause** adalah Chrome Extension berbasis Manifest V3 untuk YouTube dan YouTube Music. Extension ini menggabungkan fitur visual inject, focus mode, custom theme, wallpaper, ad cleaner, custom CSS, dan anti-pause safe clicker dalam satu package.
+> Focus mode, theme injection, wallpaper, ad cleanup, and safe continue-watching clicker.
 
-> Status: personal-use extension. Built for `youtube.com`, `www.youtube.com`, and `music.youtube.com`.
+A Chrome extension that declutters YouTube, adds dark custom themes, wallpaper overlay, and automatically dismisses "continue watching" dialogs.
 
 ## Features
 
-### YouTube Inject
+### Focus Tools
+- Hide comments, sidebar, Shorts, home feed, end screen, player overlays
+- Cinema-width player (max 1280px with rounded corners)
+- Clean player UI
 
-- Theme preset
-- Custom color override
-- Wallpaper from URL
-- Local wallpaper upload
-- Wallpaper opacity / blur / dim control
-- Custom CSS injector
-- Hide comments
-- Hide sidebar
-- Hide Shorts
-- Hide home feed
-- Hide end screen
-- Cinema width mode
-- Progress bar theme color
-- Popup/menu readability styling
+### Theme Engine
+7 preset themes or fully custom colors:
+| Theme | Description |
+|-------|------------|
+| **Dark Red** | Warm crimson tones |
+| **Midnight Blue** | Deep ocean blues |
+| **Purple Neon** | Electric purples |
+| **Light Blue Sea** | Cyan/teal accents |
+| **Lime Forest** | Green tones |
+| **Black Glass** | Frosted dark glass |
+| **YouTube Default** | Default YouTube appearance |
 
-### Anti Pause Safe
+Custom Colors toggle lets you pick accent, background, and text color independently.
 
-- Auto-detects YouTube continue-watching popup
-- Auto-clicks positive continue button
-- Multi-language button detection
-- Works on YouTube and YouTube Music
-- Does **not** override `video.play()`
-- Does **not** override `video.pause()`
-- Does **not** override `document.hidden`
-- Does **not** force autoplay after manual pause
+### Wallpaper
+- Set an image URL as page background
+- Upload a local image (auto-compressed for Chrome storage)
+- Controls: opacity, blur, dim
 
 ### Ad Cleaner
+- **Normal** – hides standard ad slots
+- **Aggressive** – also removes sponsored sections in the feed
 
-- Normal mode for common YouTube ad containers
-- Aggressive mode for stronger cleanup
-- Skip-button click attempt when available
-- CSS hide + DOM cleanup strategy
+### Anti Pause Safe
+Automatically clicks "Continue watching" / "Are you still watching?" dialogs. Only clicks visible confirmation buttons — does not click hidden or off-screen elements.
 
-## Supported Sites
+### Custom CSS
+- Paste raw CSS in the popup textarea (with toggle)
+- **Folder CSS** – Dropdown selector that loads `.css` files from `custom-css/` folder. Drop a new file in `custom-css/`, add its name to `index.json`, and pick it from the dropdown.
 
-```txt
-https://youtube.com/*
-https://www.youtube.com/*
-https://music.youtube.com/*
-```
+### Sidebar / Playlist Panel Theming
+`forceTheme()` applies inline `!important` styles to `ytd-playlist-panel-renderer`, playlist items, compact video/radio/playlist renderers, and section headers — works even after YouTube SPA navigation via a debounced `MutationObserver`.
 
 ## Installation
 
-1. Download or clone this repository.
-2. Open Chrome.
-3. Go to:
+1. Clone or download this repo
+2. Open `chrome://extensions`
+3. Enable **Developer mode**
+4. Click **Load unpacked** and select the extension folder
 
-```txt
-chrome://extensions
+## Usage
+
+Click the toolbar icon to open the popup. Toggle features on/off and click **Apply**. Use **Force Inject** to re-inject the content script into all open YouTube tabs.
+
+## File Structure
+
+```
+yt-focus-ext/
+├── content.js        # Main content script (CSS injection, theme, observer, messaging)
+├── manifest.json     # Extension manifest (MV3)
+├── popup.html        # Popup UI
+├── popup.js          # Popup logic (settings, messaging, wallpaper)
+├── popup.css         # Popup styles
+├── yt-mix-page.html  # Debug page (YouTube Mix HTML snapshot)
+├── icons/
+│   └── icon.svg      # Extension icon
+└── custom-css/
+    ├── index.json    # File manifest (list of available CSS files)
+    └── rgb-progressbar.css  # Example: RGB animated progress bar
 ```
 
-4. Enable **Developer Mode**.
-5. Click **Load unpacked**.
-6. Select the extension folder.
-7. Open YouTube.
-8. Click the extension icon.
-9. Press **Apply** or **Force Inject**.
+## Custom CSS Folder
 
-## Recommended First Run
+Drop `.css` files into `custom-css/`, list them in `index.json`:
 
-```txt
-1. Remove older versions of the extension.
-2. Load the latest folder with Load unpacked.
-3. Close all YouTube tabs.
-4. Open YouTube again.
-5. Click Force Inject.
+```json
+["rgb-progressbar.css", "my-theme.css"]
 ```
 
-## Storage Notes
-
-Local wallpaper upload is saved through Chrome extension storage. Large images can hit Chrome storage quota. Recommended formats:
-
-```txt
-JPG
-PNG
-WEBP
-```
-
-Recommended size:
-
-```txt
-<= 2560px longest side
-<= 7MB stored data after compression
-```
-
-For very large wallpaper files, use a hosted image URL instead of local storage.
-
-## Custom CSS Example
-
-```css
-.ytp-play-progress,
-.ytp-swatch-background-color,
-#progress {
-  background: linear-gradient(90deg, red, orange, yellow, lime, cyan, blue, violet) !important;
-  box-shadow: 0 0 14px cyan !important;
-}
-```
-
-## Project Structure
-
-```txt
-manifest.json
-content.js
-popup.html
-popup.css
-popup.js
-LICENSE
-README.md
-```
-
-## Permissions
-
-```txt
-storage
-unlimitedStorage
-tabs
-scripting
-```
-
-Host permissions:
-
-```txt
-youtube.com
-www.youtube.com
-music.youtube.com
-```
-
-## Safety Design
-
-This extension avoids risky playback hooks. Anti-pause logic only scans visible dialogs and clicks the positive continue button when the popup text matches a known continue-watching pattern.
-
-## Troubleshooting
-
-### Apply does not work
-
-```txt
-1. Reload the YouTube tab.
-2. Click Force Inject.
-3. If still failed, remove old extension versions.
-4. Load unpacked again.
-```
-
-### Wallpaper does not save
-
-```txt
-Use a smaller JPG/PNG/WEBP file or use a wallpaper URL.
-```
-
-### YouTube layout looks broken
-
-```txt
-1. Switch theme to YouTube Default.
-2. Disable Custom CSS.
-3. Click Apply.
-4. Reload YouTube.
-```
+Then select from the **Folder CSS** dropdown in the popup.
 
 ## License
 
-This project is licensed under the **GNU General Public License v3.0**.
+GPL-3.0-or-later — see file headers for details.
 
-See [`LICENSE`](./LICENSE) for the full license text.
-
-## Author
-
-Created by **Faa Ramadhan**.
+Copyright (C) 2026 Faa Ramadhan

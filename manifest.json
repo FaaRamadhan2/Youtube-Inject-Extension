@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "YouTube Focus Anti Pause Combo",
-  "version": "13.0.0",
+  "version": "14.0.0",
   "description": "Focus mode, YouTube theme injection, wallpaper, ad cleanup, and safe continue-watching clicker.",
   "permissions": [
     "storage",
@@ -14,10 +14,22 @@
     "https://www.youtube.com/*",
     "https://music.youtube.com/*"
   ],
+  "icons": {
+    "16": "icons/icon.svg",
+    "48": "icons/icon.svg",
+    "128": "icons/icon.svg"
+  },
   "action": {
     "default_title": "YouTube Focus Combo",
-    "default_popup": "popup.html"
+    "default_popup": "popup.html",
+    "default_icon": "icons/icon.svg"
   },
+  "web_accessible_resources": [
+    {
+      "resources": ["custom-css/*"],
+      "matches": ["https://*.youtube.com/*", "https://music.youtube.com/*"]
+    }
+  ],
   "content_scripts": [
     {
       "matches": [
